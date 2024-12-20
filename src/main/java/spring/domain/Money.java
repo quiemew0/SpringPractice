@@ -10,7 +10,7 @@ import jakarta.persistence.Id;
 
 public class Money {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) ///!!!!!!
     private Long id;
 
     private int date;

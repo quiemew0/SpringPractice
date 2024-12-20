@@ -10,4 +10,5 @@ import java.util.Optional;
 @Repository
 public interface MoneyCalRepository extends JpaRepository<MoneyCal, Integer> {
     Optional<MoneyCal> findByDate(int date);
+
 }

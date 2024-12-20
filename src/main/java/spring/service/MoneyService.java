@@ -45,7 +45,7 @@ public class MoneyService {
             int initCal = (sign.equals("sub")) ? -amount : amount;
             moneyCal = new MoneyCal(date,initCal);
         }
-        MoneyCal savedCalMoney = moneyCalRepository.save(moneyCal);
+        // MoneyCal savedCalMoney = moneyCalRepository.save(moneyCal);
         return Optional.of(savedMoney);
     }
 /*
@@ -63,9 +63,9 @@ public class MoneyService {
         return moneyCalRepository.findByDate(date);
     }
 
-    /*
-    public Optional<Money> deleteMoney(int date) {
-        Optional<Money> optionalMoney = moneyRepository.findByDate(date);
+
+    public Optional<Money> deleteMoney(Long id) {
+        Optional<Money> optionalMoney = moneyRepository.findById(id);
         if (optionalMoney.isPresent()) {
             Money money = optionalMoney.get();
             money.setDeleted(true);
@@ -74,5 +74,5 @@ public class MoneyService {
         }
         return Optional.empty();
     }
-    */
+
 }
