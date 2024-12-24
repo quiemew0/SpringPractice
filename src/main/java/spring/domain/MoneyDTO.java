@@ -7,6 +7,16 @@ public class MoneyDTO {
     private String sign;
     private int amount;
     private boolean isDeleted;
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public String setName(String name) {
+        this.name = name;
+        return name;
+    }
 
     public void setId(Long id) {
         this.id = id;

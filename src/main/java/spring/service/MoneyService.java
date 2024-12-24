@@ -25,8 +25,9 @@ public class MoneyService {
     // 삼항연산자는 사용안하는거 추천
     // enum
 
-    public Optional<Money> regMoney(int date, String sign, int amount){
-        Money money = new Money(date,sign,amount,false);
+    public Optional<Money> regMoney(int date, String sign, int amount, Long userid){
+        //Long userID = User.Id()
+        Money money = new Money(date,sign,amount,false, userid);
         Money savedMoney = moneyRepository.save(money);
 
         Optional<MoneyCal> preMoney = moneyCalRepository.findByDate(date);
@@ -55,7 +56,9 @@ public class MoneyService {
     /* public Optional<Money> getMoneyByDate(int date){
         return moneyRepository.findByDate(date);
     }*/
-
+    public List<Money> getMoneyByUserid(Long id){
+        return moneyRepository.findByIsDeletedFalseAndUserid(id);
+    }
     public List<Money> getMoneyByDate(int date){
         return moneyRepository.findByIsDeletedFalseAndDate(date);
     }
@@ -64,10 +67,10 @@ public class MoneyService {
     }
 
 
-    public Optional<Money> deleteMoney(Long id) {
-        Optional<Money> optionalMoney = moneyRepository.findById(id);
-        if (optionalMoney.isPresent()) {
-            Money money = optionalMoney.get();
+    public Optional<Money> deleteMoney(Long id, int date) {
+        Optional<Money> optionalIdandDate = moneyRepository.findByUseridAndDate(id,date);
+        if (optionalIdandDate.isPresent()) {
+            Money money = optionalIdandDate.get();
             money.setDeleted(true);
             moneyRepository.save(money);
             return Optional.of(money);
