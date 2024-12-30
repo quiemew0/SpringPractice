@@ -56,11 +56,11 @@ public class MoneyController {
         List<Money> response = money.orElseThrow(()->new IllegalArgumentException("Error!"));
         return new ResponseEntity<>(response,HttpStatusCode.valueOf(200));
     }
-
+/*
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException ex){
         return ResponseEntity.badRequest().body("illegal argument exception발생!!!!! "+ex.getMessage());
-    }
+    }*/
 /*
     @GetMapping("/money/search") //날짜별 건수들 다 출력
     public ResponseEntity<List<Money>>searchMoney(@RequestParam int date){
