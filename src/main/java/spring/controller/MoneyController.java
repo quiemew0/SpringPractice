@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import spring.domain.*;
 import spring.service.MoneyService;
@@ -54,6 +55,11 @@ public class MoneyController {
         Optional<List<Money>> money = Optional.ofNullable(moneyService.getMoneyByUserid(id));
         List<Money> response = money.orElseThrow(()->new IllegalArgumentException("Error!"));
         return new ResponseEntity<>(response,HttpStatusCode.valueOf(200));
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException ex){
+        return ResponseEntity.badRequest().body("illegal argument exception발생!!!!! "+ex.getMessage());
     }
 /*
     @GetMapping("/money/search") //날짜별 건수들 다 출력
