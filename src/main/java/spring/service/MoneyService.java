@@ -1,6 +1,8 @@
 package spring.service;
 
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import spring.domain.Money;
 import spring.domain.MoneyCal;
@@ -25,9 +27,9 @@ public class MoneyService {
     // 삼항연산자는 사용안하는거 추천
     // enum
 
-    public Optional<Money> regMoney(int date, String sign, int amount, Long userid){
+    public Optional<Money> regMoney(int date, String sign, int amount, Long userId){
         //Long userID = User.Id()
-        Money money = new Money(date,sign,amount,false, userid);
+        Money money = new Money(date,sign,amount,false, userId);
         Money savedMoney = moneyRepository.save(money);
 
         Optional<MoneyCal> preMoney = moneyCalRepository.findByDate(date);
@@ -56,19 +58,24 @@ public class MoneyService {
     /* public Optional<Money> getMoneyByDate(int date){
         return moneyRepository.findByDate(date);
     }*/
-    public List<Money> getMoneyByUserid(Long id){
-        return moneyRepository.findByIsDeletedFalseAndUserid(id);
+
+    @Cacheable(value = "userid", key = "#id") //p0 parameter 첫번째꺼
+    public List<Money> getMoneyByUserId(Long id){
+        System.out.println("캐시에있음");
+        return moneyRepository.findByIsDeletedFalseAndUserId(id);
     }
+
     public List<Money> getMoneyByDate(int date){
+        getMoneyByUserId(1L);
         return moneyRepository.findByIsDeletedFalseAndDate(date);
     }
     public Optional<MoneyCal> getTotalMoneyByDate(int date){
         return moneyCalRepository.findByDate(date);
     }
 
-
+    @CacheEvict(value = "userid", key = "#id")
     public Optional<Money> deleteMoney(Long id, int date) {
-        Optional<Money> optionalIdandDate = moneyRepository.findByUseridAndDate(id,date);
+        Optional<Money> optionalIdandDate = moneyRepository.findByUserIdAndDate(id,date);
         if (optionalIdandDate.isPresent()) {
             Money money = optionalIdandDate.get();
             money.setDeleted(true);

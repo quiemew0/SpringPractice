@@ -1,5 +1,6 @@
 package spring.service;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import spring.domain.Member;
 import spring.repository.UserIdRepository;
@@ -14,6 +15,7 @@ public class UserService {
     public UserService(UserIdRepository userIdRepository) {
         this.userIdRepository = userIdRepository;
     }
+
 
     public Optional<Member> regUser(String name, int age){
         Member member = new Member(name,age);

@@ -1,15 +1,9 @@
 package spring.controller;
 
 
-import org.h2.engine.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import spring.domain.*;
 import spring.service.MoneyService;
@@ -34,22 +28,22 @@ public class MoneyController {
     }
 
     @PostMapping("/money/user")
-    public ResponseEntity<Member>register(@RequestBody UserDTO userinfo){
-        Optional<Member> user = userService.regUser(userinfo.getName(),userinfo.getAge());
+    public ResponseEntity<Member>register(@RequestBody UserDTO userInfo){
+        Optional<Member> user = userService.regUser(userInfo.getName(),userInfo.getAge());
         Member response = user.orElseThrow(() ->new IllegalArgumentException("error!"));
         return new ResponseEntity<>(response,HttpStatusCode.valueOf(200));
     }
 
     @PostMapping("/money/register/{id}")
-    @Cacheable(value = "userid", key = "#id")
-    public ResponseEntity<Money> register(@RequestBody MoneyDTO moneyinfo,@PathVariable("id") Long id){
-        Optional<Money>money = moneyService.regMoney(moneyinfo.getDate(),moneyinfo.getSign(),moneyinfo.getAmount(),id);
+   // @Cacheable(value = "userId", key = "#id")
+    public ResponseEntity<Money> register(@RequestBody MoneyDTO moneyInfo,@PathVariable Long id){
+        Optional<Money>money = moneyService.regMoney(moneyInfo.getDate(),moneyInfo.getSign(),moneyInfo.getAmount(),id);
         Money response = money.orElseThrow(()->new IllegalArgumentException("error!"));
         return new ResponseEntity<>(response,HttpStatusCode.valueOf(200));
     }
 
     @DeleteMapping("/money/delete/{id}")
-    @CacheEvict(value="userid",key ="#id")
+    //@CacheEvict(value="userId",key ="#id")
     public ResponseEntity<Money> delete(@PathVariable Long id, @RequestParam int date){
         Optional<Money> money = moneyService.deleteMoney(id,date);
         Money response = money.orElseThrow(()-> new IllegalArgumentException("Error!"));
@@ -57,10 +51,16 @@ public class MoneyController {
     }
 
     @GetMapping("/money/show/{id}")
-    public ResponseEntity<List<Money>> searchbyUserid(@PathVariable Long id){
-        Optional<List<Money>> money = Optional.ofNullable(moneyService.getMoneyByUserid(id));
-        List<Money> response = money.orElseThrow(()->new IllegalArgumentException("Error!"));
+    public ResponseEntity<List<Money>> searchbyUserId(@PathVariable("id") Long id){
+        List<Money> response = moneyService.getMoneyByUserId(id);
+        System.out.println(response);
+        //Optional<List<Money>> money = Optional.ofNullable(moneyService.getMoneyByUserId(id));
+        //List<Money> response = money.orElseThrow(()->new IllegalArgumentException("Error!"));
         return new ResponseEntity<>(response,HttpStatusCode.valueOf(200));
+    }
+    @GetMapping("/test")
+    public void test(){
+        moneyService.getMoneyByDate(1);
     }
 /*
     @ExceptionHandler(IllegalArgumentException.class)

@@ -14,32 +14,32 @@ public class Money {
     private String sign;
     private int amount;
     private boolean isDeleted;
-    private Long userid;
+    private Long userId;
 
     /*
         @ManyToOne
         @JoinColumn(name = "user")
         private User user;
     */
-    public Money(int date,String sign,int amount,Long userid){
-        this(date,sign,amount, false,userid);
+    public Money(int date,String sign,int amount,Long userId){
+        this(date,sign,amount, false,userId);
     }
-    public Money(int date, String sign, int amount, boolean isDeleted,Long userid) {
+    public Money(int date, String sign, int amount, boolean isDeleted,Long userId) {
         this.date = date;
         this.sign = sign;
         this.amount = amount;
         this.isDeleted = isDeleted;
-        this.userid= userid;
+        this.userId = userId;
     }
     public Money(){
     }
 
-    public Long getUserid() {
-        return userid;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUserid(Long userid) {
-        this.userid = userid;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public boolean isDeleted(){
